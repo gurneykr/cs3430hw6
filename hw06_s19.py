@@ -68,7 +68,8 @@ def spread_of_disease_model(p, t0, p0, t1, p1):
     assert isinstance(p, const) and isinstance(t0, const)
     assert isinstance(p0, const) and isinstance(t1, const)
     # find B
-    B = const((p.get_val() - p0.get_val())/(p0.get_val()*math.e**t0.get_val()))
+    B = const(((p.get_val()/p0.get_val())-1.0)/ math.e**(t0.get_val()))
+    # B = const((p.get_val() - p0.get_val())/(p0.get_val()*math.e**t0.get_val()))
     x = const(((p.get_val() / p1.get_val()) - 1.0) / B.get_val())
     k = const(math.log(x.get_val())/(-1.0*p.get_val()*t1.get_val()))
 
