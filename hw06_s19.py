@@ -2,8 +2,8 @@
 
 #############################################
 # module: hw06_s19.py
-# YOUR NAME
-# YOUR A#
+# Krista Gurney
+# A01671888
 #############################################
 
 # These are the imports I used to implement my 
@@ -23,10 +23,14 @@ from deriv import deriv
 ## ************* Problem 1 ******************
 
 def percent_retention_model(lmbda, a):
+    #r(t) = (100-a)e^(-lmbda*t) + a
     assert isinstance(lmbda, const)
     assert isinstance(a, const)
-    # your code here
-    pass
+
+    left = make_plus(make_const(100.0), make_prod(-1.0, a.get_val()))
+    right = make_e_expr(make_prod(make_prod(-1.0, lmbda.get_val()), make_pwr('t', 1.0)))
+
+    return make_plus(make_prod(left, right), a.get_val())
 
 def plot_retention(lmbda, a, t0, t1):
     assert isinstance(lmbda, const)
