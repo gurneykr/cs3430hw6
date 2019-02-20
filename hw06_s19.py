@@ -68,14 +68,41 @@ def spread_of_disease_model(p, t0, p0, t1, p1):
     assert isinstance(p, const) and isinstance(t0, const)
     assert isinstance(p0, const) and isinstance(t1, const)
     # find B
-    B = (p.get_val() - p0.get_val())/()
+    B = const((p.get_val() - p0.get_val())/(p0.get_val()*math.e**t0.get_val()))
+    x = const(((p.get_val() / p1.get_val()) - 1.0) / B.get_val())
+    k = const(math.log(x.get_val())/(-1.0*p.get_val()*t1.get_val()))
 
+    bottom = make_plus(make_const(1.0), make_prod(B, make_e_expr(make_prod(make_const(-1.0), make_prod(p, make_prod(k, make_pwr('t', 1.0)))))))
+    return make_quot(p, bottom)
 
 def plot_spread_of_disease(p, t0, p0, t1, p1, tl, tu):
     assert isinstance(p, const) and isinstance(t0, const)
     assert isinstance(p0, const) and isinstance(t1, const)
-    pass
-    
+    rt = spread_of_disease_model(p, t0, p0, t1, p1)
+    rt_tof = tof(rt)
+    derv_rt = deriv(rt)
+    print("derv_rt= ", derv_rt)
+    derv_tof = tof(derv_rt)
+
+    xvals = np.linspace(tl.get_val(), tu.get_val(), 10000)
+    yvals1 = np.array([rt_tof(x) for x in xvals])
+
+    xvals2 = np.linspace(tl.get_val(), tu.get_val(), 10000)
+    yvals2 = np.array([derv_tof(x) for x in xvals])
+
+    fig1 = plt.figure(1)
+    fig1.suptitle('Spread of Disease')
+    plt.xlabel('t')
+    plt.ylabel('sdf and dsdf')
+    plt.ylim([0, 100000])
+    plt.xlim([tl.get_val(), tu.get_val()])
+    plt.grid()
+    plt.plot(xvals, yvals1, label='sdf', c='r')
+    plt.plot(xvals2, yvals2, label='dsdf', c='b')
+
+    plt.legend(loc='best')
+    plt.show()
+
 ## ************* Problem 3 ******************
 
 def plot_plant_growth(m, t1, x1, t2, x2, tl, tu):
