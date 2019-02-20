@@ -52,6 +52,8 @@ def pwr_deriv(p):
     if isinstance(b, const):
         if isinstance(d, pwr): #e^(x^1)
             return p
+        elif isinstance(d, prod):#85 *e^(-0.5 *t)    => 85 *-0.5 *e^(-0.5 *t)
+            return prod(p, deriv(d))
         #e^(2x)
     if isinstance(b, var):
         if isinstance(d, const):
@@ -101,6 +103,8 @@ def prod_deriv(p):
                 return m1
             elif isinstance(m2.get_deg(), const) and m2.get_deg().get_val() == 0:
                 return m1
+            elif isinstance(m2.get_deg(), prod):
+                return prod(m1, deriv(m2))
             else:
                 # get 6 * 3
                 simplifiedAlt1 = const(m1.get_val() * m2.get_deg().get_val())

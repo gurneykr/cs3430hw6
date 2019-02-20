@@ -27,18 +27,39 @@ def percent_retention_model(lmbda, a):
     assert isinstance(lmbda, const)
     assert isinstance(a, const)
 
-    left = make_plus(make_const(100.0), make_prod(-1.0, a.get_val()))
-    right = make_e_expr(make_prod(make_prod(-1.0, lmbda.get_val()), make_pwr('t', 1.0)))
+    left = const(100.0-a.get_val())
+    right = make_e_expr(make_prod(const(-1.0*lmbda.get_val()), make_pwr('t', 1.0)))
 
-    return make_plus(make_prod(left, right), a.get_val())
+    return make_plus(make_prod(left, right), a)
 
 def plot_retention(lmbda, a, t0, t1):
     assert isinstance(lmbda, const)
     assert isinstance(a, const)
     assert isinstance(t0, const)
     assert isinstance(t1, const)
-    # your code here
-    pass
+    rt = percent_retention_model(lmbda, a)
+    rt_fn = tof(rt)
+    derv_rt = deriv(rt)
+    derv_tof = tof(derv_rt)
+
+    xvals = np.linspace(t0.get_val(), t1.get_val(), 10000)
+    yvals1 = np.array([rt_fn(x) for x in xvals])
+
+    xvals2 = np.linspace(t0.get_val(), t1.get_val(), 10000)
+    yvals2 = np.array([derv_tof(x) for x in xvals])
+
+    fig1 = plt.figure(1)
+    fig1.suptitle('Ebbinghaus Model of Forgetting')
+    plt.xlabel('t')
+    plt.ylabel('prf and dprf')
+    plt.ylim([-20, 100])
+    plt.xlim([t0.get_val(), t1.get_val()])
+    plt.grid()
+    plt.plot(xvals, yvals1, label='prf', c='r')
+    plt.plot(xvals2, yvals2, label='dprf', c='b')
+
+    plt.legend(loc='best')
+    plt.show()
 
 ## ************* Problem 2 ******************
 
