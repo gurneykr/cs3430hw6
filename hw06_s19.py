@@ -42,16 +42,17 @@ def plot_retention(lmbda, a, t0, t1):
 
 ## ************* Problem 2 ******************
 
-def plot_spread_of_disease(p, t0, p0, t1, p1, tl, tu):
-    assert isinstance(p, const) and isinstance(t0, const)
-    assert isinstance(p0, const) and isinstance(t1, const)
-    # your code here
-    pass
 
 def spread_of_disease_model(p, t0, p0, t1, p1):
     assert isinstance(p, const) and isinstance(t0, const)
     assert isinstance(p0, const) and isinstance(t1, const)
-    # your code here
+    # find B
+    B = (p.get_val() - p0.get_val())/()
+
+
+def plot_spread_of_disease(p, t0, p0, t1, p1, tl, tu):
+    assert isinstance(p, const) and isinstance(t0, const)
+    assert isinstance(p0, const) and isinstance(t1, const)
     pass
     
 ## ************* Problem 3 ******************
