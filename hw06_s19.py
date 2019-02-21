@@ -70,7 +70,11 @@ def spread_of_disease_model(p, t0, p0, t1, p1):
     # find B
     B = const(((p.get_val()/p0.get_val())-1.0)/ math.e**(t0.get_val()))
     x = const(((p.get_val() / p1.get_val()) - 1.0) / B.get_val())
+
+    #find k
     k = const(math.log(x.get_val())/(-1.0*p.get_val()*t1.get_val()))
+
+    #simplify exponent before creating it
     expon = const(-1.0*p.get_val()*k.get_val())
 
     bottom = make_plus(make_const(1.0), make_prod(B, make_e_expr(make_prod(expon, make_pwr('t', 1.0)))))
@@ -82,7 +86,7 @@ def plot_spread_of_disease(p, t0, p0, t1, p1, tl, tu):
     rt = spread_of_disease_model(p, t0, p0, t1, p1)
     rt_tof = tof(rt)
     derv_rt = deriv(rt)
-    print("derv_rt= ", derv_rt)
+
     derv_tof = tof(derv_rt)
 
     xvals = np.linspace(tl.get_val(), tu.get_val(), 10000)
@@ -106,33 +110,67 @@ def plot_spread_of_disease(p, t0, p0, t1, p1, tl, tu):
 
 ## ************* Problem 3 ******************
 
+def plant_growth_model(m, t0, h0, t1, h1):
+    assert isinstance(m, const) and isinstance(t0, const)
+    assert isinstance(h0, const) and isinstance(t1, const)
+    assert isinstance(h1, const)
+    pass
+    # # find B
+    # B = const(((m.get_val() / h0.get_val()) - 1.0) / math.e ** (t0.get_val()))
+    # x = const(((m.get_val() / h1.get_val()) - 1.0) / B.get_val())
+    #
+    # # find k
+    # k = const(math.log(x.get_val()) / (-1.0 * m.get_val() * t1.get_val()))
+    #
+    # # simplify exponent before creating it
+    # expon = const(-1.0 * m.get_val() * k.get_val())
+    #
+    # bottom = make_plus(make_const(1.0), make_prod(B, make_e_expr(make_prod(expon, make_pwr('t', 1.0)))))
+    # return make_quot(m, bottom)
+
 def plot_plant_growth(m, t1, x1, t2, x2, tl, tu):
     assert isinstance(m, const) and isinstance(t1, const)
     assert isinstance(x1, const) and isinstance(t2, const)
     assert isinstance(x2, const) and isinstance(tl, const)
     assert isinstance(tu, const)
-    # your code here
     pass
-
-def plant_growth_model(m, t1, x1, t2, x2):
-    assert isinstance(m, const) and isinstance(t1, const)
-    assert isinstance(x1, const) and isinstance(x2, const)
-    assert isinstance(x2, const)
-    # your code here
-    pass
-                                      
 ## ************* Problem 4 ******************
 
 def spread_of_news_model(p, k):
     assert isinstance(p, const) and isinstance(k, const)
-    # your code here
-    pass
+
+    expon = const(-1.0*k.get_val())
+    return make_prod(p, make_plus(const(1.0), make_prod(const(-1.0), make_e_expr(make_prod(expon, make_pwr('t', 1.0))))))
+
 
 def plot_spread_of_news(p, k, tl, tu):
     assert isinstance(p, const) and isinstance(k, const)
     assert isinstance(tl, const) and isinstance(tu, const)
-    # your code here
-    pass
+    nm = spread_of_news_model(p, k)
+    nm_tof = tof(nm)
+    deriv_nm = deriv(nm)
+    deriv_nm_tof = tof(deriv_nm)
+
+    xvals = np.linspace(tl.get_val(), tu.get_val(), 10000)
+    yvals1 = np.array([nm_tof(x) for x in xvals])
+
+    xvals2 = np.linspace(tl.get_val(), tu.get_val(), 10000)
+    yvals2 = np.array([deriv_nm_tof(x) for x in xvals])
+
+    fig1 = plt.figure(1)
+    fig1.suptitle('Spread of News')
+    plt.xlabel('t')
+    plt.ylabel('snf and dsnf')
+    plt.ylim([-2000, 52000])
+    plt.xlim([tl.get_val(), tu.get_val()])
+    plt.grid()
+    plt.plot(xvals, yvals1, label='snf', c='r')
+    plt.plot(xvals2, yvals2, label='dsnf', c='b')
+
+    plt.legend(loc='best')
+    plt.show()
+
+
 
 
 
