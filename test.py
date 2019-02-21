@@ -33,14 +33,15 @@ class Assign01UnitTests(unittest.TestCase):
         eqf = tof(eq)
         assert not eqf is None
         err = 100.0
-        gt = lambda t: 500000/(1+(2499*math.e**(-500000*.000001832701472148934*t)))
+        gt = lambda t: 500000/(1+(2499*math.e**(-500000*.000001833782304372798*t)))
         print(gt(1), eqf(1))
         plot_spread_of_disease(make_const(500000), make_const(0.0), make_const(200.0), make_const(1.0),
                                make_const(500.0), make_const(0.0), make_const(7.0))
 
         for t in range(100):
-            print("t[",t,"] ",abs(gt(t) - eqf(t)) )
-            assert abs(gt(t) - eqf(t)) <= err
+            # print("t[",t,"] ",abs(gt(t) - eqf(t)) )
+            # print(gt(t), " ", eqf(t))
+             assert abs(gt(t) - eqf(t)) <= err
         print("Unit Test 02: pass")
 
     if __name__ == "__main__":

@@ -72,6 +72,9 @@ def spread_of_disease_model(p, t0, p0, t1, p1):
     # B = const((p.get_val() - p0.get_val())/(p0.get_val()*math.e**t0.get_val()))
     x = const(((p.get_val() / p1.get_val()) - 1.0) / B.get_val())
     k = const(math.log(x.get_val())/(-1.0*p.get_val()*t1.get_val()))
+    #k = const(math.log((p.get_val()/p1.get_val())-1.0)/(-1.0*p.get_val()))
+    print("k= ",k)
+    print("B= ", B)
 
     bottom = make_plus(make_const(1.0), make_prod(B, make_e_expr(make_prod(make_const(-1.0), make_prod(p, make_prod(k, make_pwr('t', 1.0)))))))
     return make_quot(p, bottom)
