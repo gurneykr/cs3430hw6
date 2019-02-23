@@ -115,10 +115,8 @@ def plant_growth_model(m, t0, h0, t1, h1):
     assert isinstance(h0, const) and isinstance(t1, const)
     assert isinstance(h1, const)
 
-    #find k
     t_new = abs(t0.get_val()- t1.get_val())
 
-    # # find B
     B = const((m.get_val() / h0.get_val()) - 1)
 
     k = const(math.log(((m.get_val()/h1.get_val())-1)/B.get_val()) / (-1.0*m.get_val()*t_new))

@@ -45,12 +45,12 @@ class Assign01UnitTests(unittest.TestCase):
     #          assert abs(gt(t) - eqf(t)) <= err
     #     print("Unit Test 02: pass")
 
-    def test_03(self):
-        print("****Unit Test 03********")
-        eq = plant_growth_model(make_const(55.0), make_const(9.0), make_const(8.0), make_const(25.0), make_const(48.0))
-        print("eq: ", eq)
-        print("eq(25): ", tof(eq)(25))
-        plot_plant_growth(make_const(55.0), make_const(9.0), make_const(8.0), make_const(25.0), make_const(48.0), make_const(9.0), make_const(50.0))
+    # def test_03(self):
+    #     print("****Unit Test 03********")
+    #     eq = plant_growth_model(make_const(55.0), make_const(9.0), make_const(8.0), make_const(25.0), make_const(48.0))
+    #     print("eq: ", eq)
+    #     print("eq(25): ", tof(eq)(25))
+    #     plot_plant_growth(make_const(55.0), make_const(9.0), make_const(8.0), make_const(25.0), make_const(48.0), make_const(9.0), make_const(50.0))
 
 
     # def test_04(self):
