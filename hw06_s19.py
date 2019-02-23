@@ -114,26 +114,50 @@ def plant_growth_model(m, t0, h0, t1, h1):
     assert isinstance(m, const) and isinstance(t0, const)
     assert isinstance(h0, const) and isinstance(t1, const)
     assert isinstance(h1, const)
-    pass
-    # # find B
-    # B = const(((m.get_val() / h0.get_val()) - 1.0) / math.e ** (t0.get_val()))
-    # x = const(((m.get_val() / h1.get_val()) - 1.0) / B.get_val())
-    #
-    # # find k
-    # k = const(math.log(x.get_val()) / (-1.0 * m.get_val() * t1.get_val()))
-    #
-    # # simplify exponent before creating it
-    # expon = const(-1.0 * m.get_val() * k.get_val())
-    #
-    # bottom = make_plus(make_const(1.0), make_prod(B, make_e_expr(make_prod(expon, make_pwr('t', 1.0)))))
-    # return make_quot(m, bottom)
 
-def plot_plant_growth(m, t1, x1, t2, x2, tl, tu):
+    #find k
+    t_new = abs(t0.get_val()- t1.get_val())
+
+    # # find B
+    B = const((m.get_val() / h0.get_val()) - 1)
+
+    k = const(math.log(((m.get_val()/h1.get_val())-1)/B.get_val()) / (-1.0*m.get_val()*t_new))
+
+    # # simplify exponent before creating it
+    expon = const(-1.0*m.get_val()*k.get_val())
+
+    bottom = make_plus(make_const(1.0), make_prod(B, make_e_expr(make_prod(expon, make_pwr('t', 1.0)))))
+    return make_quot(m, bottom)
+
+def plot_plant_growth(m, t0, h0, t1, h1, tl, tu):
     assert isinstance(m, const) and isinstance(t1, const)
-    assert isinstance(x1, const) and isinstance(t2, const)
-    assert isinstance(x2, const) and isinstance(tl, const)
+    assert isinstance(t0, const) and isinstance(h0, const)
+    assert isinstance(h1, const) and isinstance(tl, const)
     assert isinstance(tu, const)
-    pass
+    pg = plant_growth_model(m, t0, h0, t1, h1)
+    pg_tof = tof(pg)
+    derv_pg = deriv(pg)
+
+    derv_tof = tof(derv_pg)
+
+    xvals = np.linspace(tl.get_val()-t0.get_val(), tu.get_val(), 10000)
+    yvals1 = np.array([pg_tof(x) for x in xvals])
+
+    xvals2 = np.linspace(tl.get_val()-t0.get_val(), tu.get_val(), 10000)
+    yvals2 = np.array([derv_tof(x) for x in xvals2])
+
+    fig1 = plt.figure(1)
+    fig1.suptitle('Plant Growth')
+    plt.xlabel('t')
+    plt.ylabel('pgf and dpgf')
+    plt.ylim([-2, 58])
+    plt.xlim([tl.get_val()-t0.get_val(), tu.get_val()])
+    plt.grid()
+    plt.plot(xvals, yvals1, label='pgf', c='r')
+    plt.plot(xvals2, yvals2, label='dpgf', c='b')
+
+    plt.legend(loc='best')
+    plt.show()
 ## ************* Problem 4 ******************
 
 def spread_of_news_model(p, k):
